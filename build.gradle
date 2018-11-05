@@ -1,0 +1,42 @@
+ buildscript {
+	repositories {
+		mavenCentral();
+		jcenter();
+		maven {
+			name = "sonatype";
+			url = "https://oss.sonatype.org/content/repositories/snapshots/";
+		}
+		maven {
+			url "https://plugins.gradle.org/m2/";
+		}
+	}
+	dependencies {
+		classpath "gradle.plugin.net.minecrell:licenser:0.3";
+	}
+}
+
+apply plugin: "java";
+apply plugin: "net.minecrell.licenser";
+apply plugin: "eclipse";
+
+group = "blue.endless.libnoise";
+archivesBaseName = "LibnoiseJava";
+version = "0.0.1";
+
+sourceCompatibility = 1.8;
+targetCompatibility = 1.8;
+
+repositories {
+	jcenter()
+	mavenCentral()
+}
+ 
+dependencies {
+	testCompile "junit:junit:4.12";
+	
+	compile group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2";
+}
+
+license {
+	exclude "**/RandomVectors.java";
+}

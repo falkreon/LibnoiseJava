@@ -28,11 +28,8 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import blue.endless.libnoise.NoiseQuality;
-import blue.endless.libnoise.Perlin;
-import blue.endless.libnoise.RandomVectors;
-import blue.endless.libnoise.ValueNoise;
-import blue.endless.libnoise.Voronoi;
+import blue.endless.libnoise.generator.Generator;
+import blue.endless.libnoise.generator.Voronoi;
 
 public class Example extends JFrame {
 private static final long serialVersionUID = -6682388330686106856L;
@@ -67,28 +64,32 @@ private static final long serialVersionUID = -6682388330686106856L;
 	public void generateTerrain(BufferedImage im) {
 		//First, visualize a scaledNoiseField.
 		
-		long seed = new Random().nextLong();
 		int halfWidth = im.getWidth()/2;
 		int halfHeight = im.getHeight()/2;
+		double scale = 1/1024d;
 		
-		Voronoi voronoi = new Voronoi();
-		Perlin perlin = new Perlin();
-		
+		Generator generator =
+				new Voronoi()
+				.setEnableDistance(false);
+				//= new Perlin();
+				//= new Billow();
 		
 		for(int y=0; y<im.getHeight(); y++) {
 			for(int x=0; x<im.getWidth(); x++) {
-				//float cell = (float)(1.0f - voronoi.getValue(x/1024D, 0.5D, y/1024D));
-				//float cell = (float)ValueNoise.valueCoherentNoise3D(x/64d, 0.5d, y/64d, (int)seed, ValueNoise.NoiseQuality.BEST);
-				//float cell = (float)ValueNoise.gradientNoise3D(RandomVectors.table[0], RandomVectors.table[1], RandomVectors.table[2], x, 0, y, (int)seed);
-				float cell = (float)ValueNoise.gradientCoherentNoise3D(x/64d, 0, y/64d, (int)seed, NoiseQuality.BEST) / 2f + 0.5f;
-				//float cell = (float)perlin.getValue(x/256d, 0, y/256d);
+				//Shift the origin to the center of the picture so we can get a good idea about what zero crossings look like
+				float dx = x + halfWidth;
+				float dy = y + halfHeight;
 				
+				//Rescale coords so we can get right up into the pixels
+				dx *= scale;
+				dy *= scale;
+				
+				float cell = (float)generator.getValue(dx, 0, dy) / 2f + 0.5f;
 				
 				//if (cell<0.9f) cell = 0.0f;
 				//if (cell>0.0f) cell = 1.0f; //threshold
 				int cellValue = clamp((int)(cell * 255), 0, 255);
 				
-				//Color cellColor = new Color(cellValue, cellValue, cellValue);
 				im.setRGB(x, y, gray(cellValue));
 			}
 		}

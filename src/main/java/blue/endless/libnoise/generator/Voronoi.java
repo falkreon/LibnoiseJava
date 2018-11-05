@@ -19,16 +19,18 @@
  * along with libnoise-java. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package blue.endless.libnoise;
+package blue.endless.libnoise.generator;
 
 import java.util.Random;
 
-public class Voronoi {
+import blue.endless.libnoise.ValueNoise;
+
+public class Voronoi implements Generator {
 	private static final double SQRT_3 = Math.sqrt(3);
 	
 	protected int m_seed;
 	protected double m_frequency = 32;
-	protected double m_displacement = 0;
+	protected double m_displacement = 1;
 	protected boolean m_enableDistance = true;
 	
 	public Voronoi() {
@@ -39,6 +41,22 @@ public class Voronoi {
 		m_seed = seed;
 	}
 	
+	public Voronoi setFrequency(double frequency) {
+		this.m_frequency = frequency;
+		return this;
+	}
+	
+	public Voronoi setDisplacement(double displacement) {
+		this.m_displacement = displacement;
+		return this;
+	}
+	
+	public Voronoi setEnableDistance(boolean enable) {
+		this.m_enableDistance = enable;
+		return this;
+	}
+	
+	@Override
 	public double getValue(double x, double y, double z) {
 		// This method could be more efficient by caching the seed values. Fix
 		// later.

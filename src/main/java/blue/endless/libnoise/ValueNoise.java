@@ -178,4 +178,14 @@ public class ValueNoise {
 
 		return Interpolate.linear(iy0, iy1, zs);
 	}
+	
+	public static double makeInt32Range (double n) {
+		if (n >= 1073741824.0) {
+			return (2.0 * (n % 1073741824.0)) - 1073741824.0;
+		} else if (n <= -1073741824.0) {
+			return (2.0 * (n % 1073741824.0)) + 1073741824.0;
+		} else {
+			return n;
+		}
+	}
 }

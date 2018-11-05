@@ -19,11 +19,15 @@
  * along with libnoise-java. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package blue.endless.libnoise;
+package blue.endless.libnoise.generator;
 
 import java.util.Random;
 
-public class Perlin {
+import blue.endless.libnoise.NoiseQuality;
+
+import static blue.endless.libnoise.ValueNoise.*;
+
+public class Perlin implements Generator {
 	
 	protected double m_frequency = 1.0;
 	protected double m_lacunarity = 2.0;
@@ -64,7 +68,13 @@ public class Perlin {
 		this.m_persistence = persistence;
 		return this;
 	}
-
+	
+	public Perlin setSeed(int seed) {
+		this.m_seed = seed;
+		return this;
+	}
+	
+	@Override
 	public double getValue (double x, double y, double z) {
 		double value = 0.0;
 		double signal = 0.0;
@@ -79,14 +89,14 @@ public class Perlin {
 		for (int curOctave = 0; curOctave < m_octaveCount; curOctave++) {
 			// Make sure that these floating-point values have the same range as a 32-
 			// bit integer so that we can pass them to the coherent-noise functions.
-			nx = MakeInt32Range (x);
-			ny = MakeInt32Range (y);
-			nz = MakeInt32Range (z);
+			nx = makeInt32Range(x);
+			ny = makeInt32Range(y);
+			nz = makeInt32Range(z);
 
 			// Get the coherent-noise value from the input value and add it to the
 			// final result.
 			seed = (m_seed + curOctave) & 0xffffffff;
-			signal = ValueNoise.gradientCoherentNoise3D(nx, ny, nz, seed, m_noiseQuality);
+			signal = gradientCoherentNoise3D(nx, ny, nz, seed, m_noiseQuality);
 			value += signal * curPersistence;
 
 			// Prepare the next octave.
@@ -97,15 +107,5 @@ public class Perlin {
 		}
 
 		return value;
-	}
-	
-	private static double MakeInt32Range (double n) {
-		if (n >= 1073741824.0) {
-			return (2.0 * (n % 1073741824.0)) - 1073741824.0;
-		} else if (n <= -1073741824.0) {
-			return (2.0 * (n % 1073741824.0)) + 1073741824.0;
-		} else {
-			return n;
-		}
 	}
 }

@@ -27,7 +27,7 @@ import blue.endless.libnoise.NoiseQuality;
 
 import static blue.endless.libnoise.ValueNoise.*;
 
-public class Perlin implements Generator {
+public class Perlin implements Module {
 	
 	protected double m_frequency = 1.0;
 	protected double m_lacunarity = 2.0;

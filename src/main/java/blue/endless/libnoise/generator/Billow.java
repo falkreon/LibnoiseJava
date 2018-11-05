@@ -6,7 +6,7 @@ import java.util.Random;
 
 import blue.endless.libnoise.NoiseQuality;
 
-public class Billow implements Generator {
+public class Billow implements Module {
 	protected double m_frequency = 1.0;
 	protected double m_lacunarity = 2.0;
 	protected int m_octaveCount = 6;

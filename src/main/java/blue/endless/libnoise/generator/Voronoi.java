@@ -25,7 +25,7 @@ import java.util.Random;
 
 import blue.endless.libnoise.ValueNoise;
 
-public class Voronoi implements Generator {
+public class Voronoi implements Module {
 	private static final double SQRT_3 = Math.sqrt(3);
 	
 	protected int m_seed;

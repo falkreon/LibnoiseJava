@@ -24,12 +24,13 @@ package blue.endless.libnoise.example;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 import javax.swing.JFrame;
 
-import blue.endless.libnoise.generator.Generator;
+import blue.endless.libnoise.generator.Module;
+import blue.endless.libnoise.generator.RidgedMulti;
 import blue.endless.libnoise.generator.Voronoi;
+import blue.endless.libnoise.modifier.Turbulence;
 
 public class Example extends JFrame {
 private static final long serialVersionUID = -6682388330686106856L;
@@ -68,11 +69,14 @@ private static final long serialVersionUID = -6682388330686106856L;
 		int halfHeight = im.getHeight()/2;
 		double scale = 1/1024d;
 		
-		Generator generator =
-				new Voronoi()
-				.setEnableDistance(false);
+		Module generator =
+				//new Voronoi()
+				//.setEnableDistance(false);
 				//= new Perlin();
 				//= new Billow();
+				new RidgedMulti();
+		
+		//generator = new Turbulence().setSources(generator);
 		
 		for(int y=0; y<im.getHeight(); y++) {
 			for(int x=0; x<im.getWidth(); x++) {

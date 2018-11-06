@@ -1,3 +1,24 @@
+/*
+ * Copyright (C) 2018 Falkreon (Isaac Ellingson)
+ *
+ *     Original libnoise library copyright (C) 2003, 2004 Jason Bevins
+ *
+ * This file is part of the libnoise-java library.
+ *
+ * Libnoise-java is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Libnoise-java is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libnoise-java. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package blue.endless.libnoise.generator;
 
 import blue.endless.libnoise.NoiseQuality;
@@ -38,6 +59,33 @@ public class RidgedMulti implements Module {
 			m_pSpectralWeights[i] = Math.pow(frequency, -h);
 			frequency *= m_lacunarity;
 		}
+	}
+	
+	
+	public RidgedMulti setFrequency(double frequency) {
+		this.m_frequency = frequency;
+		return this;
+	}
+	
+	public RidgedMulti setLacunarity(double lacunarity) {
+		this.m_lacunarity = lacunarity;
+		calcSpectralWeights();
+		return this;
+	}
+	
+	public RidgedMulti setNoiseQuality(NoiseQuality quality) {
+		this.m_noiseQuality = quality;
+		return this;
+	}
+	
+	public RidgedMulti setOctaveCount(int octaves) {
+		this.m_octaveCount = octaves;
+		return this;
+	}
+	
+	public RidgedMulti setSeed(int seed) {
+		this.m_seed = seed;
+		return this;
 	}
 	
 	// Multifractal code originally written by F. Kenton "Doc Mojo" Musgrave,

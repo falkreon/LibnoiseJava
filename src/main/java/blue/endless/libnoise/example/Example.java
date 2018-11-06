@@ -27,9 +27,13 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import blue.endless.libnoise.generator.Checkerboard;
 import blue.endless.libnoise.generator.Module;
+import blue.endless.libnoise.generator.Perlin;
 import blue.endless.libnoise.generator.RidgedMulti;
+import blue.endless.libnoise.generator.Spheres;
 import blue.endless.libnoise.generator.Voronoi;
+import blue.endless.libnoise.modifier.RotatePoint;
 import blue.endless.libnoise.modifier.Turbulence;
 
 public class Example extends JFrame {
@@ -67,22 +71,25 @@ private static final long serialVersionUID = -6682388330686106856L;
 		
 		int halfWidth = im.getWidth()/2;
 		int halfHeight = im.getHeight()/2;
-		double scale = 1/1024d;
+		double scale = 1/128d;
 		
 		Module generator =
 				//new Voronoi()
 				//.setEnableDistance(false);
 				//= new Perlin();
 				//= new Billow();
-				new RidgedMulti();
+				//new Perlin().setSeed(0);
+				new Checkerboard();
+		
+		generator = new RotatePoint().setSources(generator).setAngles(0, 45, 0);
 		
 		//generator = new Turbulence().setSources(generator);
 		
 		for(int y=0; y<im.getHeight(); y++) {
 			for(int x=0; x<im.getWidth(); x++) {
 				//Shift the origin to the center of the picture so we can get a good idea about what zero crossings look like
-				float dx = x + halfWidth;
-				float dy = y + halfHeight;
+				double dx = x - halfWidth;
+				double dy = y - halfHeight;
 				
 				//Rescale coords so we can get right up into the pixels
 				dx *= scale;

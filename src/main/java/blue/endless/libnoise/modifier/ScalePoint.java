@@ -21,8 +21,25 @@
 
 package blue.endless.libnoise.modifier;
 
-import blue.endless.libnoise.generator.Module;
-
-public interface ModifierModule extends Module {
-	public ModifierModule setSources(Module... sources);
+public class ScalePoint extends AbstractModifierModule<ScalePoint> {
+	protected double m_xScale = 1;
+	protected double m_yScale = 1;
+	protected double m_zScale = 1;
+	
+	public ScalePoint() {}
+	
+	public ScalePoint setScale(double xScale, double yScale, double zScale) {
+		this.m_xScale = xScale;
+		this.m_yScale = yScale;
+		this.m_zScale = zScale;
+		
+		return this;
+	}
+	
+	@Override
+	public double getValue(double x, double y, double z) {
+		if (sources.length<1) return 0;
+		
+		return sources[0].getValue(x * m_xScale, y * m_yScale, z * m_zScale);
+		}
 }

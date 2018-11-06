@@ -19,10 +19,20 @@
  * along with libnoise-java. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package blue.endless.libnoise.modifier;
+package blue.endless.libnoise.generator;
 
-import blue.endless.libnoise.generator.Module;
+import static blue.endless.libnoise.ValueNoise.makeInt32Range;
 
-public interface ModifierModule extends Module {
-	public ModifierModule setSources(Module... sources);
+public class Checkerboard implements Module {
+
+	
+	@Override
+	public double getValue(double x, double y, double z) {
+		//TODO: (Falkreon) FIX UNDESIRABLE ZERO-CROSSING BEHAVIOR
+		int ix = (int)(makeInt32Range (x));
+		int iy = (int)(makeInt32Range (y));
+		int iz = (int)(makeInt32Range (z));
+		return (ix & 1 ^ iy & 1 ^ iz & 1)!=0 ? -1.0: 1.0;
+	}
+
 }

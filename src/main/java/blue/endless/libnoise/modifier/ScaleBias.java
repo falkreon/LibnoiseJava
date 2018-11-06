@@ -21,8 +21,15 @@
 
 package blue.endless.libnoise.modifier;
 
-import blue.endless.libnoise.generator.Module;
-
-public interface ModifierModule extends Module {
-	public ModifierModule setSources(Module... sources);
+public class ScaleBias extends AbstractModifierModule<ScaleBias> {
+	protected double m_bias = 0;
+	protected double m_scale = 1;
+	
+	public ScaleBias() {}
+	
+	public double getValue (double x, double y, double z) {
+		if (sources.length<1) return 0;
+		
+		return sources[0].getValue(x, y, z) * m_scale + m_bias;
+	}
 }

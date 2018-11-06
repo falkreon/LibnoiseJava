@@ -19,10 +19,28 @@
  * along with libnoise-java. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package blue.endless.libnoise.modifier;
+package blue.endless.libnoise.generator;
 
-import blue.endless.libnoise.generator.Module;
+public class Spheres implements Module {
+	protected double m_frequency = 1.0;
+	
+	public Spheres() {}
+	
+	public Spheres setFrequency(double frequency) {
+		m_frequency = frequency;
+		return this;
+	}
+	
+	@Override
+	public double getValue (double x, double y, double z) {
+		x *= m_frequency;
+		y *= m_frequency;
+		z *= m_frequency;
 
-public interface ModifierModule extends Module {
-	public ModifierModule setSources(Module... sources);
+		double distFromCenter = Math.sqrt(x * x + y * y + z * z);
+		double distFromSmallerSphere = distFromCenter - Math.floor(distFromCenter);
+		double distFromLargerSphere = 1.0 - distFromSmallerSphere;
+		double nearestDist = Math.min(distFromSmallerSphere, distFromLargerSphere);
+		return 1.0 - (nearestDist * 4.0); // Puts it in the -1.0 to +1.0 range.
+	}
 }

@@ -27,13 +27,19 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import blue.endless.libnoise.NoiseQuality;
+import blue.endless.libnoise.generator.Billow;
 import blue.endless.libnoise.generator.Checkerboard;
 import blue.endless.libnoise.generator.Module;
 import blue.endless.libnoise.generator.Perlin;
 import blue.endless.libnoise.generator.RidgedMulti;
 import blue.endless.libnoise.generator.Spheres;
 import blue.endless.libnoise.generator.Voronoi;
+import blue.endless.libnoise.modifier.Bandpass;
+import blue.endless.libnoise.modifier.Blend;
+import blue.endless.libnoise.modifier.Multiply;
 import blue.endless.libnoise.modifier.RotatePoint;
+import blue.endless.libnoise.modifier.Select;
 import blue.endless.libnoise.modifier.Turbulence;
 
 public class Example extends JFrame {
@@ -71,17 +77,29 @@ private static final long serialVersionUID = -6682388330686106856L;
 		
 		int halfWidth = im.getWidth()/2;
 		int halfHeight = im.getHeight()/2;
-		double scale = 1/128d;
+		double scale = 1/256d;
 		
 		Module generator =
 				//new Voronoi()
 				//.setEnableDistance(false);
-				//= new Perlin();
-				//= new Billow();
+				//new Perlin();
+				new Billow().setFrequency(0.5);
 				//new Perlin().setSeed(0);
-				new Checkerboard();
+				//new Checkerboard();
 		
-		generator = new RotatePoint().setSources(generator).setAngles(0, 45, 0);
+		//generator = new Bandpass().setSources(generator, (x,y,z)->-1).setBounds(0, 256);
+		
+		Module plains = new Multiply().setSources(new Perlin().setNoiseQuality(NoiseQuality.BEST), (x,y,z)->0.5);
+		
+		generator = new Blend().setSources(plains, generator, generator);
+		//generator = new RotatePoint().setSources(generator).setAngles(0, 12.5, 0);
+		/*
+		Module a = new Billow();
+		Module b = new Spheres();
+		
+		generator = new Select()
+				.setBounds(-1, 0)
+				.setSources(a, b, generator);*/
 		
 		//generator = new Turbulence().setSources(generator);
 		

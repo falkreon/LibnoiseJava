@@ -56,6 +56,11 @@ public class Voronoi implements Module {
 		return this;
 	}
 	
+	public Voronoi setSeed(int seed) {
+		m_seed = seed;
+		return this;
+	}
+	
 	@Override
 	public double getValue(double x, double y, double z) {
 		// This method could be more efficient by caching the seed values. Fix

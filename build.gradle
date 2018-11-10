@@ -40,7 +40,7 @@ if (file("private.gradle").exists()) {
 
 	apply from: "private.gradle";
 	
-	defaultTasks "clean", "build", "sourcesJar", "publishToMavenLocal";
+	defaultTasks "clean", "build", "sourcesJar";//, "publishToMavenLocal";
 } else {
 	print "No private.gradle is present. Skipping publish."
 	

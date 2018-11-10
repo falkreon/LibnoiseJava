@@ -19,7 +19,14 @@ apply plugin: "java";
 apply plugin: "net.minecrell.licenser";
 apply plugin: "eclipse";
 
-
+group = "blue.endless.libnoise";
+archivesBaseName = "LibnoiseJava";
+version = "0.0.1";
+def versionSuffix = '-SNAPSHOT'
+if (System.env.BUILD_NUMBER) {
+	versionSuffix = ''
+	version = version+'-'+System.env.BUILD_NUMBER
+}
 
 if (file("private.gradle").exists()) {
 	print "private.gradle is present. Enabling publish."
@@ -28,28 +35,39 @@ if (file("private.gradle").exists()) {
 
 	publishing {
 		publications {
-			mavenJava(MavenPublication) {
+			mavenPrimary(MavenPublication) {
 				from components.java;
 
-				artifact sourcesJar {
-					classifier "sources";
-				}
+				groupId project.group;
+				artifactId "LibnoiseJava";
+				version project.version+versionSuffix;
+				artifact jar;
+			}
+
+			mavenSources(MavenPublication) {
+				from components.java;
+
+				classifier "sources";
+				groupId project.group;
+				artifactId "LibnoiseJava";
+				version project.version+versionSuffix;
+				artifact sourcesJar;
 			}
 		}
 	}
 
 	apply from: "private.gradle";
 	
-	defaultTasks "clean", "build", "sourcesJar";//, "publishToMavenLocal";
+	defaultTasks "clean", "build", "sourcesJar";
 } else {
 	print "No private.gradle is present. Skipping publish."
 	
 	defaultTasks "clean", "build", "sourcesJar";
 }
 
-group = "blue.endless.libnoise";
-archivesBaseName = "LibnoiseJava";
-version = "0.0.1";
+
+
+
 
 sourceCompatibility = 1.8;
 targetCompatibility = 1.8;

@@ -41,7 +41,7 @@ if (file("private.gradle").exists()) {
 				groupId project.group;
 				artifactId "LibnoiseJava";
 				version project.version+versionSuffix;
-				artifact source: jar
+				artifact mainJar;
 			}
 
 			mavenSources(MavenPublication) {
@@ -57,11 +57,11 @@ if (file("private.gradle").exists()) {
 
 	apply from: "private.gradle";
 	
-	defaultTasks "clean", "build", "sourcesJar";
+	defaultTasks "clean", "mainJar", "sourcesJar";
 } else {
 	print "No private.gradle is present. Skipping publish."
 	
-	defaultTasks "clean", "build", "sourcesJar";
+	defaultTasks "clean", "mainJar", "sourcesJar";
 }
 
 
@@ -82,6 +82,11 @@ dependencies {
 	testCompile "junit:junit:4.12";
 	
 	compile group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2";
+}
+
+task mainJar(type: Jar, dependsOn: compileJava) {
+	classifier = "";
+	from sourceSets.main.output
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

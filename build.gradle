@@ -41,7 +41,7 @@ if (file("private.gradle").exists()) {
 				groupId project.group;
 				artifactId "LibnoiseJava";
 				version project.version+versionSuffix;
-				artifact jar
+				artifact source: jar
 			}
 
 			mavenSources(MavenPublication) {

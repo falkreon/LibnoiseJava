@@ -19,7 +19,11 @@ apply plugin: "java";
 apply plugin: "net.minecrell.licenser";
 apply plugin: "eclipse";
 
+
+
 if (file("private.gradle").exists()) {
+	print "private.gradle is present. Enabling publish."
+	
 	apply plugin: "maven-publish";
 
 	publishing {
@@ -35,6 +39,12 @@ if (file("private.gradle").exists()) {
 	}
 
 	apply from: "private.gradle";
+	
+	defaultTasks "clean", "build", "sourcesJar", "publishToMavenLocal";
+} else {
+	print "No private.gradle is present. Skipping publish."
+	
+	defaultTasks "clean", "build", "sourcesJar";
 }
 
 group = "blue.endless.libnoise";
@@ -44,7 +54,7 @@ version = "0.0.1";
 sourceCompatibility = 1.8;
 targetCompatibility = 1.8;
 
-defaultTasks "clean", "build", "sourcesJar"
+
 
 repositories {
 	jcenter()

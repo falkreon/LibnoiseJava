@@ -1,5 +1,5 @@
 node {
 	checkout scm
-	sh './gradlew clean build sourceJar publishToMavenLocal'
+	sh './gradlew'
 	archive 'build/libs/*jar'
 }

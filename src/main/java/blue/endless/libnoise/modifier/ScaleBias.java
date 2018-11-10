@@ -27,6 +27,16 @@ public class ScaleBias extends AbstractModifierModule<ScaleBias> {
 	
 	public ScaleBias() {}
 	
+	public ScaleBias setScale(double scale) {
+		this.m_scale = scale;
+		return this;
+	}
+	
+	public ScaleBias setBias(double bias) {
+		this.m_bias = bias;
+		return this;
+	}
+	
 	public double getValue (double x, double y, double z) {
 		if (sources.length<1) return 0;
 		

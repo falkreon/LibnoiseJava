@@ -28,41 +28,27 @@ if (System.env.BUILD_NUMBER) {
 	version = version+'-'+System.env.BUILD_NUMBER
 }
 
-if (file("private.gradle").exists()) {
-	print "private.gradle is present. Enabling publish."
-	
-	apply plugin: "maven-publish";
+apply plugin: "maven-publish";
 
-	publishing {
-		publications {
-			mavenPrimary(MavenPublication) {
-				from components.java;
+publishing {
+	publications {
+		mavenPrimary(MavenPublication) {
+			from components.java;
 
-				groupId project.group;
-				artifactId "LibnoiseJava";
-				version project.version+versionSuffix;
-				artifact mainJar;
-			}
-
-			mavenSources(MavenPublication) {
-				from components.java;
-
-				groupId project.group;
-				artifactId "LibnoiseJava";
-				version project.version+versionSuffix;
-				artifact sourcesJar;
-			}
+			groupId project.group;
+			artifactId "LibnoiseJava";
+			version project.version+versionSuffix;
+			artifact sourcesJar;
 		}
 	}
-
-	apply from: "private.gradle";
-	
-	defaultTasks "clean", "mainJar", "sourcesJar";
-} else {
-	print "No private.gradle is present. Skipping publish."
-	
-	defaultTasks "clean", "mainJar", "sourcesJar";
 }
+
+
+if (file("private.gradle").exists()) {
+	apply from: "private.gradle";
+}
+
+defaultTasks "clean", "mainJar", "sourcesJar";
 
 
 

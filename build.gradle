@@ -41,13 +41,12 @@ if (file("private.gradle").exists()) {
 				groupId project.group;
 				artifactId "LibnoiseJava";
 				version project.version+versionSuffix;
-				artifact jar;
+				artifact jar
 			}
 
 			mavenSources(MavenPublication) {
 				from components.java;
 
-				classifier "sources";
 				groupId project.group;
 				artifactId "LibnoiseJava";
 				version project.version+versionSuffix;
@@ -86,7 +85,7 @@ dependencies {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = 'sources'
+	classifier = "sources"
 	from sourceSets.main.allSource
 }
 

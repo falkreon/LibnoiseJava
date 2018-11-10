@@ -1,11 +1,5 @@
-pipeline {
-	agent any
-	stages {
-		stage('Build') {
-			steps {
-				sh './gradlew'
-				archive 'build/libs/*jar'
-			}
-		}
-	}
+node {
+	checkout scm
+	sh './gradlew'
+	archive 'build/libs/*jar'
 }

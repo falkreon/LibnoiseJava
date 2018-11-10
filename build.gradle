@@ -19,6 +19,20 @@ apply plugin: "java";
 apply plugin: "net.minecrell.licenser";
 apply plugin: "eclipse";
 
+if (file("private.gradle").exists()) {
+	apply plugin: "maven";
+
+	configurations {
+		deploy
+	}
+
+	dependencies {
+		deploy "org.apache.maven.wagon:wagon-ssh:2.10";
+	}
+
+	apply from: "private.gradle";
+}
+
 group = "blue.endless.libnoise";
 archivesBaseName = "LibnoiseJava";
 version = "0.0.1";

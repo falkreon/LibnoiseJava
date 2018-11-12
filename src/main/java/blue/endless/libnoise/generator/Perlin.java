@@ -23,6 +23,7 @@ package blue.endless.libnoise.generator;
 
 import java.util.Random;
 
+import blue.endless.libnoise.Module;
 import blue.endless.libnoise.NoiseQuality;
 
 import static blue.endless.libnoise.ValueNoise.*;

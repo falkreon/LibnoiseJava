@@ -4,7 +4,7 @@ pipeline {
 		stage('Build') {
 			steps {
 				sh 'rm -f private.gradle'
-				sh './gradlew clean mainJar sourcesJar'
+				sh './gradlew clean build sourcesJar'
 				archive 'build/libs/*jar'
 			}
 		}

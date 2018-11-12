@@ -19,7 +19,7 @@
  * along with libnoise-java. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package blue.endless.libnoise.generator;
+package blue.endless.libnoise;
 
 public interface Module {
 	/**

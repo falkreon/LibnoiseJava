@@ -21,7 +21,7 @@
 
 package blue.endless.libnoise.modifier;
 
-import blue.endless.libnoise.generator.Module;
+import blue.endless.libnoise.Module;
 
 public abstract class AbstractModifierModule<E extends AbstractModifierModule<?>> implements ModifierModule {
 

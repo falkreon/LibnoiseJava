@@ -25,6 +25,7 @@ import static blue.endless.libnoise.ValueNoise.*;
 
 import java.util.Random;
 
+import blue.endless.libnoise.Module;
 import blue.endless.libnoise.NoiseQuality;
 
 public class Billow implements Module {

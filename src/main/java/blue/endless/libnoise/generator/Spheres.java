@@ -21,6 +21,8 @@
 
 package blue.endless.libnoise.generator;
 
+import blue.endless.libnoise.Module;
+
 public class Spheres implements Module {
 	protected double m_frequency = 1.0;
 	

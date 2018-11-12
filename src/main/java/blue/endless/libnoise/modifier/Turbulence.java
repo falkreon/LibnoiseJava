@@ -23,7 +23,7 @@ package blue.endless.libnoise.modifier;
 
 import java.util.Random;
 
-import blue.endless.libnoise.generator.Module;
+import blue.endless.libnoise.Module;
 import blue.endless.libnoise.generator.Perlin;
 
 public class Turbulence implements ModifierModule {

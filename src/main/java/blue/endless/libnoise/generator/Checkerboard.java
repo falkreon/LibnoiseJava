@@ -23,6 +23,8 @@ package blue.endless.libnoise.generator;
 
 import static blue.endless.libnoise.ValueNoise.makeInt32Range;
 
+import blue.endless.libnoise.Module;
+
 public class Checkerboard implements Module {
 	
 	@Override

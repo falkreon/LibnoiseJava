@@ -23,6 +23,7 @@ package blue.endless.libnoise.generator;
 
 import java.util.Random;
 
+import blue.endless.libnoise.Module;
 import blue.endless.libnoise.ValueNoise;
 
 public class Voronoi implements Module {

@@ -11,13 +11,14 @@
 		}
 	}
 	dependencies {
-		classpath "gradle.plugin.net.minecrell:licenser:0.3";
+		classpath "gradle.plugin.net.minecrell:licenser:0.4.1";
 	}
 }
 
 apply plugin: "java";
 apply plugin: "net.minecrell.licenser";
 apply plugin: "eclipse";
+apply plugin: "maven-publish";
 
 group = "blue.endless.libnoise";
 archivesBaseName = "LibnoiseJava";
@@ -28,15 +29,13 @@ if (System.env.BUILD_NUMBER) {
 	version = version+'-'+System.env.BUILD_NUMBER
 }
 
-apply plugin: "maven-publish";
-
 publishing {
 	publications {
 		mavenPrimary(MavenPublication) {
 			from components.java;
 
 			groupId project.group;
-			artifactId "LibnoiseJava";
+			artifactId project.name;
 			version project.version+versionSuffix;
 			artifact sourcesJar;
 		}
@@ -48,10 +47,7 @@ if (file("private.gradle").exists()) {
 	apply from: "private.gradle";
 }
 
-defaultTasks "clean", "mainJar", "sourcesJar";
-
-
-
+defaultTasks "clean", "build", "sourcesJar";
 
 
 sourceCompatibility = 1.8;
@@ -68,11 +64,6 @@ dependencies {
 	testCompile "junit:junit:4.12";
 	
 	compile group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2";
-}
-
-task mainJar(type: Jar, dependsOn: compileJava) {
-	classifier = "";
-	from sourceSets.main.output
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

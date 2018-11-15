@@ -27,6 +27,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import blue.endless.libnoise.Interpolate;
 import blue.endless.libnoise.Module;
 import blue.endless.libnoise.NoiseQuality;
 import blue.endless.libnoise.generator.Billow;
@@ -58,7 +59,7 @@ private static final long serialVersionUID = -6682388330686106856L;
 	
 	
 	public Example() {
-		this.setMinimumSize(new Dimension(1024,768));
+		this.setMinimumSize(new Dimension(2048,1024));
 		this.setSize(1024, 768);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -78,31 +79,96 @@ private static final long serialVersionUID = -6682388330686106856L;
 	public void generateTerrain(BufferedImage im) {
 		int halfWidth = im.getWidth()/2;
 		int halfHeight = im.getHeight()/2;
-		double scale = 1/4d;
+		double scale = 1/2d;
+		
+		Module a = new Perlin().setFrequency(1/72.0).setOctaveCount(5);
+		Module b = new Perlin().setFrequency(1/64.0).setOctaveCount(5);
+		//Module c = new Noise().setFrequency(1/32.0);
+		
+		
+		
 		
 		Module generator =
 		//		new Voronoi().setEnableDistance(false).setFrequency(1/32.0);
-				new Noise();
+				new Noise()
+				.setFrequency(1/32.0);
+		
+		//generator = new Turbulence().setPower(2.0).setSources(generator);
+		
+		Module generator2 = new Noise()
+				.setFrequency(1/16.0);
+		
+		int period = 64;
+		
+		generator = new RotatePoint().setAngles(0, 45.0, 0).setSources(generator);
 		
 		//generator = new Blur().setSources(generator).setPlane(Blur.Plane.XZ);//.setQuality(NoiseQuality.BEST);
 		
 		for(int y=0; y<im.getHeight(); y++) {
 			for(int x=0; x<im.getWidth(); x++) {
+				int wholeX = x / period;
+				int fractX = x % period;
+				double fX = fractX / (double)period;
+				int rescaleX = wholeX*period + (int)(Interpolate.sCurve5(fX)*period);
+				
+				int wholeY = y / period;
+				int fractY = y % period;
+				double fY = fractY / (double)period;
+				double rescaleY = wholeY*period + (int)(Interpolate.sCurve5(fY)*period);
+				
 				//Shift the origin to the center of the picture so we can get a good idea about what zero crossings look like
 				double dx = x - halfWidth;
 				double dy = y - halfHeight;
+				
 				
 				//Rescale coords so we can get right up into the pixels
 				dx *= scale;
 				dy *= scale;
 				
-				float cell = (float)generator.getValue(dx, 0, dy) / 2f + 0.5f;
+				double cell1 = a.getValue(dx, 0, dy) / 2.0 + 0.5;
+				double cell2 = b.getValue(dx, 0, dy) / 2.0 + 0.5;
+				//double cell3 = c.getValue(dx, 0, dy) / 2.0 + 0.5;
+				
+				int cell1T = (int)(cell1*3.0);
+				int cell2T = (int)(cell2*3.0);
+				//int cell3T = (int)(cell3*3.0);
+				int cellIndex = cell1T*3 + cell2T;// + cell3T;
+				double cell = cellIndex / 9.0;
 				
 				//if (cell<0.9f) cell = 0.0f;
 				//if (cell>0.0f) cell = 1.0f; //threshold
+				int col = stages(cell, 20);
+				/*
 				int cellValue = clamp((int)(cell * 255), 0, 255);
 				
-				im.setRGB(x, y, gray(cellValue));
+				int r = cellValue;
+				int g = cellValue;
+				int b = cellValue;
+				if (cellValue < 64) {
+					r = 255;
+					g = 128;
+					b = 128;
+				} else if (cellValue < 128) {
+					r = 128;
+					g = 255;
+					b = 128;
+				} else if (cellValue < 192) {
+					r = 128;
+					g = 128;
+					b = 255;
+				} else {
+					r = 255;
+					g = 255;
+					b = 128;
+				}
+				
+				int col = 0xFF000000 |
+						(r << 16) |
+						(g <<  8) |
+						(b <<  0);*/
+				im.setRGB(x, y, col);
+				
+				//im.setRGB(x, y, gray(cellValue));
 				//System.out.print(".");
 			}
 			//System.out.println();
@@ -169,6 +235,22 @@ private static final long serialVersionUID = -6682388330686106856L;
 			(safe <<  8) |
 			(safe << 16) |
 			(0xFF << 24);
+	}
+	
+	private static final int[] DISTINCT_COLORS = {
+			0xFFe6194b, 0xFF3cb44b, 0xFFffe119, 0xFF4363d8, 0xFFf58231, 0xFF911eb4, 0xFF46f0f0, 0xFFf032e6, 0xFFbcf60c,
+			0xFFfabebe, 0xFF008080, 0xFFe6beff, 0xFF9a6324, 0xFFfffac8, 0xFF800000, 0xFFaaffc3, 0xFF808000, 0xFFffd8b1,
+			0xFF000075, 0xFF808080, 0xFFffffff, 0xFF000000
+			//0xFFFF0000, 0xFF00FF00, 0xFF0000FF, 0xFFFFFF00, 0xFFFF00FF, 0xFF00FFFF, 0xFFFFFFFF,
+	};
+	
+	//For "value" between 0 and 1
+	public int stages(double value, int count) {
+		if (count >= DISTINCT_COLORS.length) count = DISTINCT_COLORS.length - 1;
+		if (value<0) value = 0;
+		if (value>1) value = 1;
+		int i = (int)(value * count);
+		return DISTINCT_COLORS[i];
 	}
 	
 	public static float clamp(float value, float min, float max) {

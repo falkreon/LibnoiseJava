@@ -41,5 +41,5 @@ public class ScalePoint extends AbstractModifierModule<ScalePoint> {
 		if (sources.length<1) return 0;
 		
 		return sources[0].getValue(x * m_xScale, y * m_yScale, z * m_zScale);
-		}
+	}
 }

@@ -30,6 +30,7 @@ import blue.endless.libnoise.ValueNoise;
 public class Noise implements Module {
 	protected int seed = 1;
 	protected NoiseQuality noiseQuality = NoiseQuality.STANDARD;
+	protected double frequency = 1.0;
 	
 	public Noise() {
 		seed = new Random().nextInt();
@@ -40,6 +41,11 @@ public class Noise implements Module {
 		return this;
 	}
 	
+	public Noise setFrequency(double frequency) {
+		this.frequency = frequency;
+		return this;
+	}
+	
 	public Noise setSeed(int seed) {
 		this.seed = seed;
 		return this;
@@ -47,7 +53,7 @@ public class Noise implements Module {
 	
 	@Override
 	public double getValue(double x, double y, double z) {
-		return ValueNoise.valueCoherentNoise3D(x, y, z, seed, noiseQuality);
+		return ValueNoise.valueCoherentNoise3D(x*frequency, y*frequency, z*frequency, seed, noiseQuality);
 	}
 
 }
